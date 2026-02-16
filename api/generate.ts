@@ -1,13 +1,21 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Initialize Gemini API client on the server side
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
+
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ 
+      error: 'Configuration Error: API_KEY is missing in server environment.',
+      details: 'Please add the API_KEY environment variable in your Vercel Project Settings.'
+    });
+  }
+
+  // Initialize Gemini API client inside handler to ensure env var is picked up
+  const ai = new GoogleGenAI({ apiKey });
 
   const { topic } = req.body;
 
@@ -56,9 +64,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const results = JSON.parse(jsonText);
     return res.status(200).json(results);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
-    // Return 500 but with JSON error
-    return res.status(500).json({ error: "Failed to generate titles." });
+    // Return detailed error for debugging
+    return res.status(500).json({ 
+      error: "Failed to generate titles.",
+      details: error.message || error.toString() 
+    });
   }
 }
