@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import './index.css'; 
-import { Wand2, Terminal, AlertCircle, Sparkles } from './components/Icons';
+import { Wand2, Terminal, AlertCircle } from './components/Icons';
 import { ResultCard } from './components/ResultCard';
 import { YoutubePreview } from './components/YoutubePreview';
 import { generateTitles } from './services/geminiService';
 import { TitleResult } from './types';
-
-// Metadata mimic for Vercel/Next.js compatibility recognition
-export const metadata = {
-  title: 'ViralTitle AI',
-  description: 'High-Performance YouTube Title Generator',
-};
 
 const App: React.FC = () => {
   const [topic, setTopic] = useState('');
@@ -31,7 +24,7 @@ const App: React.FC = () => {
       const generatedTitles = await generateTitles(topic);
       setResults(generatedTitles);
       if (generatedTitles.length > 0) {
-        setActiveTitleIndex(0);
+        setActiveTitleIndex(0); // Auto-select first result
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -46,169 +39,144 @@ const App: React.FC = () => {
     }
   };
 
-  // INLINE STYLES CONSTANTS FOR FAIL-SAFE RENDERING
-  const STYLES = {
-    container: { backgroundColor: '#000000', color: '#ffffff', minHeight: '100vh' },
-    card: { backgroundColor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', borderStyle: 'solid', borderWidth: '1px' },
-    input: { backgroundColor: '#000000', color: '#ffffff', borderColor: 'rgba(255,255,255,0.1)' },
-    button: { backgroundColor: '#3b82f6', color: '#ffffff' },
-    accentText: { color: '#3b82f6' }
-  };
-
   return (
-    <div 
-      className="min-h-screen bg-black text-white p-4 md:p-8 font-sans selection:bg-blue-500/30"
-      style={STYLES.container}
-    >
-      <div className="max-w-7xl mx-auto space-y-12 md:space-y-20 pt-10">
+    <div className="min-h-screen w-full relative overflow-hidden bg-black text-white selection:bg-[#00f3ff]/20 selection:text-[#00f3ff]">
+      
+      {/* Background Grid */}
+      <div className="absolute inset-0 z-0 grid-bg pointer-events-none opacity-40"></div>
+      
+      {/* Radial Gradient Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-900/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+      <main className="relative z-10 w-full max-w-6xl mx-auto px-6 py-12 md:py-20 flex flex-col gap-12">
         
         {/* Header */}
-        <header className="flex flex-col items-center text-center gap-6">
-          <div 
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
-            style={{ border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)' }}
-          >
+        <header className="flex flex-col items-center text-center gap-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-2">
             <span className="relative flex h-2 w-2">
-               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" style={{ backgroundColor: '#3b82f6' }}></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00f3ff] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00f3ff]"></span>
             </span>
-            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest" style={{ color: '#9ca3af' }}>v2.0 // Stable Build</span>
+            <span className="font-mono text-xs text-gray-300 tracking-wider">V2.0.0 // SYSTEM ONLINE</span>
           </div>
           
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white" style={{ color: '#ffffff' }}>
-              ViralTitle<span className="text-blue-500" style={STYLES.accentText}>_AI</span>
-            </h1>
-            <p className="text-lg text-gray-400 max-w-xl mx-auto font-light" style={{ color: '#9ca3af' }}>
-              Engineered for high-CTR. Optimized for the 2026 algorithm.
-            </p>
-          </div>
+          <h1 className="text-4xl md:text-5xl font-mono font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">
+            TubePulse_AI
+          </h1>
+          <p className="text-gray-400 max-w-md font-sans leading-relaxed">
+            Next-gen title optimization engine. Generate viral-ready hooks with advanced CTR prediction.
+          </p>
         </header>
 
-        {/* Main Input Area */}
-        <section className="w-full max-w-3xl mx-auto">
-          <div 
-            className="group rounded-xl bg-white/5 border border-white/10 p-1 focus-within:border-blue-500/50 transition-all duration-300 shadow-2xl"
-            style={STYLES.card}
-          >
-             <div className="relative bg-black rounded-lg p-6 space-y-4" style={{ backgroundColor: '#0a0a0a' }}>
-                <div className="flex justify-between items-center text-xs font-mono text-gray-500 uppercase tracking-wider">
-                  <span className="flex items-center gap-2" style={{ color: '#6b7280' }}>
-                    <Terminal size={14} className="text-blue-500" style={{ color: '#3b82f6' }}/> 
-                    Input Sequence
-                  </span>
-                  <span className="border border-white/10 px-2 py-1 rounded" style={{ borderColor: 'rgba(255,255,255,0.1)', borderStyle: 'solid', borderWidth: '1px' }}>
-                    CMD + ENTER
-                  </span>
+        {/* Input Section */}
+        <div className="glass-card rounded-2xl p-1 md:p-1.5 ring-1 ring-white/10 shadow-2xl shadow-black/50 max-w-3xl mx-auto w-full">
+           <div className="bg-black/40 rounded-xl p-6 border border-white/5">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="topic" className="text-sm font-mono text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <Terminal className="w-4 h-4" />
+                    Target_Topic
+                  </label>
+                  <span className="text-[10px] text-gray-600 font-mono hidden md:inline-block">CMD + ENTER TO EXECUTE</span>
                 </div>
                 
-                <textarea
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="What is your video about? (e.g. 'Ultimate Guide to React Hooks')"
-                  className="w-full bg-transparent text-white placeholder-gray-600 text-lg font-mono focus:outline-none resize-none min-h-[120px]"
-                  style={{ backgroundColor: 'transparent', color: '#ffffff', outline: 'none' }}
-                  spellCheck={false}
-                />
-
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={handleGenerate}
-                    disabled={isLoading || !topic.trim()}
-                    className={`
-                      flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-sm transition-all
-                      ${isLoading || !topic.trim() 
-                        ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' 
-                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                      }
-                    `}
-                    style={{
-                      backgroundColor: isLoading || !topic.trim() ? 'rgba(255,255,255,0.05)' : '#3b82f6',
-                      color: isLoading || !topic.trim() ? '#6b7280' : '#ffffff',
-                      cursor: isLoading || !topic.trim() ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        <span>Running Heuristics...</span>
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Wand2 size={16} />
-                        <span>Generate Titles</span>
-                      </span>
-                    )}
-                  </button>
+                <div className="relative group">
+                  <textarea
+                    id="topic"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="e.g. iPhone 15 review, How to bake sourdough, Minecraft survival guide..."
+                    className="w-full bg-white/[0.03] text-white placeholder:text-gray-600 border border-white/10 rounded-lg p-4 h-24 focus:outline-none focus:ring-1 focus:ring-[#00f3ff]/50 focus:border-[#00f3ff]/50 focus:bg-white/[0.05] transition-all font-mono text-sm resize-none"
+                    spellCheck={false}
+                  />
                 </div>
-             </div>
-          </div>
 
-          {error && (
-            <div 
-              className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-red-400"
-              style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}
-            >
-              <AlertCircle size={20} />
-              <span className="text-sm font-medium">{error}</span>
-            </div>
-          )}
-        </section>
-
-        {/* Output Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* List Results */}
-          <div className="lg:col-span-7 space-y-4">
-             <div className="flex items-center gap-2 pb-2 border-b border-white/10 mb-4" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-                <div 
-                  className={`w-2 h-2 rounded-full ${results.length > 0 ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-gray-700'}`}
-                  style={{ backgroundColor: results.length > 0 ? '#22c55e' : '#374151' }}
-                ></div>
-                <h3 className="text-sm font-mono text-gray-400 uppercase tracking-widest" style={{ color: '#9ca3af' }}>
-                  Generated Output ({results.length})
-                </h3>
-             </div>
-
-             {results.length === 0 && !isLoading && (
-               <div 
-                  className="h-64 flex flex-col items-center justify-center border border-dashed border-white/10 rounded-xl bg-white/5 text-gray-600 font-mono text-sm"
-                  style={{ borderColor: 'rgba(255,255,255,0.1)', borderStyle: 'dashed', backgroundColor: 'rgba(255,255,255,0.02)', color: '#4b5563' }}
+                <button
+                  onClick={handleGenerate}
+                  disabled={isLoading || !topic.trim()}
+                  className={`
+                    w-full relative overflow-hidden group h-12 rounded-lg font-mono font-bold text-sm uppercase tracking-wider transition-all duration-300
+                    ${isLoading || !topic.trim() ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'bg-white text-black hover:scale-[1.005] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]'}
+                  `}
                 >
-                 <Terminal size={32} className="mb-4 opacity-50"/>
-                 <span>AWAITING INPUT STREAM...</span>
-               </div>
-             )}
+                  {isLoading && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-transparent translate-x-[-100%] animate-[shimmer_1s_infinite]" />
+                  )}
+                  <div className="flex items-center justify-center gap-2">
+                    {isLoading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                        <span>Analyzing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="w-4 h-4 transition-transform group-hover:rotate-12" />
+                        <span>Generate_Titles</span>
+                      </>
+                    )}
+                  </div>
+                </button>
+              </div>
+           </div>
+        </div>
 
-             <div className="space-y-3">
-               {results.map((result, index) => (
-                 <ResultCard
-                   key={index}
-                   result={result}
-                   index={index}
-                   isActive={index === activeTitleIndex}
-                   onClick={() => setActiveTitleIndex(index)}
-                 />
-               ))}
-             </div>
-          </div>
+        {/* Error Display */}
+        {error && (
+            <div className="max-w-3xl mx-auto w-full p-4 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <h3 className="text-sm font-medium text-red-400 font-mono">System Error</h3>
+                <p className="text-sm text-red-400/80 leading-relaxed">{error}</p>
+              </div>
+            </div>
+        )}
 
-          {/* Preview Panel */}
-          <div className="lg:col-span-5 sticky top-8">
-             <div className="flex items-center gap-2 pb-2 border-b border-white/10 mb-4" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-                <div 
-                  className={`w-2 h-2 rounded-full ${activeTitleIndex !== null ? 'bg-red-500 animate-pulse' : 'bg-gray-700'}`}
-                  style={{ backgroundColor: activeTitleIndex !== null ? '#ef4444' : '#374151' }}
-                ></div>
-                <h3 className="text-sm font-mono text-gray-400 uppercase tracking-widest" style={{ color: '#9ca3af' }}>Live Preview</h3>
-             </div>
-             <YoutubePreview title={activeTitleIndex !== null ? results[activeTitleIndex].title : null} />
-          </div>
+        {/* Output & Preview Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+           
+           {/* Left Column: Results List */}
+           <div className="lg:col-span-3 space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-white/5">
+                <div className={`h-1.5 w-1.5 rounded-full transition-colors ${results.length > 0 ? 'bg-[#00f3ff]' : 'bg-gray-700'}`}></div>
+                <h2 className="text-sm font-mono text-gray-400 uppercase tracking-widest">
+                  Output_Console ({results.length})
+                </h2>
+              </div>
+              
+              <div className="grid gap-3 min-h-[100px]">
+                 {results.length === 0 && !isLoading && (
+                   <div className="flex flex-col items-center justify-center h-48 border border-white/5 border-dashed rounded-lg bg-white/[0.01]">
+                      <span className="text-xs font-mono text-gray-600">AWAITING INPUT DATA</span>
+                   </div>
+                 )}
+                 {results.map((result, index) => (
+                   <ResultCard 
+                     key={index} 
+                     result={result} 
+                     index={index} 
+                     isActive={index === activeTitleIndex}
+                     onClick={() => setActiveTitleIndex(index)}
+                   />
+                 ))}
+              </div>
+           </div>
+
+           {/* Right Column: Preview Card */}
+           <div className="lg:col-span-2">
+              <YoutubePreview 
+                title={activeTitleIndex !== null ? results[activeTitleIndex].title : null} 
+              />
+           </div>
 
         </div>
 
-      </div>
+        {/* Footer */}
+        <footer className="text-center text-gray-600 text-xs font-mono mt-8">
+          <p>TUBEPULSE AI // SYSTEM READY</p>
+        </footer>
+
+      </main>
     </div>
   );
 };

@@ -1,54 +1,26 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { TitleResult } from "../types";
-
-// Initialize Gemini API client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateTitles = async (topic: string): Promise<TitleResult[]> => {
   if (!topic.trim()) return [];
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Generate 5 high-converting, viral YouTube titles for the topic: "${topic}".
-      
-      CRITICAL SEO RULES:
-      1. Brackets/Parentheses: MUST include [Year], (Must Watch), [Step-by-Step], or similar in at least 3 titles.
-      2. Power Words: Use words like "Insane", "Secret", "Mistake", "Finally", "Exposed".
-      3. CTR Hooks: Front-load keywords. Use odd numbers (e.g., "7 Tips").
-      4. Make them distinct from each other.
-      
-      Output JSON format only.`,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              title: {
-                type: Type.STRING,
-                description: "The generated YouTube title",
-              },
-              ctrScore: {
-                type: Type.INTEGER,
-                description: "Estimated CTR potential score between 85 and 99",
-              },
-            },
-            required: ["title", "ctrScore"],
-          },
-        },
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ topic }),
     });
 
-    const jsonText = response.text;
-    if (!jsonText) {
-      throw new Error("No data returned from AI");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Server error: ${response.status}`);
     }
 
-    return JSON.parse(jsonText) as TitleResult[];
+    const data = await response.json();
+    return data as TitleResult[];
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    throw new Error("Failed to generate titles. Please check your API key or try again.");
+    console.error("Generation Error:", error);
+    throw new Error("Failed to generate titles. Please try again later.");
   }
 };
