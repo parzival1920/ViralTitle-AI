@@ -8,7 +8,6 @@ export default {
     "./services/**/*.{js,ts,jsx,tsx}",
     "./*.{js,ts,jsx,tsx}"
   ],
-  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -16,30 +15,27 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
-        background: '#000000',
-        surface: '#111111',
-        primary: '#3b82f6',
-        neon: {
+        brand: {
+          black: '#000000',
+          surface: '#111111',
           blue: '#3b82f6',
-          purple: '#8b5cf6',
         }
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'pulse-slow': 'pulse 3s infinite',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
       },
     },
   },
+  safelist: [
+    'bg-black', 
+    'text-white', 
+    'text-gray-400',
+    'border-white/10', 
+    'border-white/20',
+    'bg-white/5',
+    'bg-white/10',
+    'text-blue-500',
+    'min-h-screen',
+    'p-4', 'p-8',
+    'rounded-xl',
+    'flex', 'flex-col', 'items-center'
+  ],
   plugins: [],
 }

@@ -9,148 +9,126 @@ export const YoutubePreview: React.FC<YoutubePreviewProps> = ({ title }) => {
   const [mode, setMode] = useState<'mobile' | 'desktop'>('desktop');
 
   return (
-    <div className="flex flex-col gap-4 sticky top-6 animate-in fade-in duration-700">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-           <div className={`h-1.5 w-1.5 rounded-full ${title ? 'bg-red-500 animate-pulse' : 'bg-gray-600'}`}></div>
-           <span className="text-xs font-mono text-gray-400 uppercase tracking-widest" style={{ color: '#9ca3af' }}>
-             {title ? 'Live_Preview' : 'Preview_Standby'}
-           </span>
-        </div>
-        <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/10" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+    <div className="flex flex-col gap-4 animate-in fade-in duration-700">
+      
+      {/* Toggle Controls */}
+      <div className="flex justify-end">
+        <div 
+          className="flex bg-white/5 rounded-lg p-1 border border-white/10"
+          style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: '1px' }}
+        >
           <button
             onClick={() => setMode('mobile')}
-            className={`p-1.5 rounded transition-all ${mode === 'mobile' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'}`}
-            title="Mobile View"
+            className={`p-2 rounded-md transition-all ${mode === 'mobile' ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+            style={{ 
+              backgroundColor: mode === 'mobile' ? 'rgba(255,255,255,0.1)' : 'transparent',
+              color: mode === 'mobile' ? '#ffffff' : '#6b7280'
+            }}
           >
-            <Smartphone className="w-4 h-4" />
+            <Smartphone size={16} />
           </button>
           <button
             onClick={() => setMode('desktop')}
-            className={`p-1.5 rounded transition-all ${mode === 'desktop' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'}`}
-            title="Desktop View"
+            className={`p-2 rounded-md transition-all ${mode === 'desktop' ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+            style={{ 
+              backgroundColor: mode === 'desktop' ? 'rgba(255,255,255,0.1)' : 'transparent',
+              color: mode === 'desktop' ? '#ffffff' : '#6b7280'
+            }}
           >
-            <Monitor className="w-4 h-4" />
+            <Monitor size={16} />
           </button>
         </div>
       </div>
 
-      {/* Main Preview Container */}
+      {/* Card Container */}
       <div 
         className={`
-          bg-[#111111] border border-white/10 rounded-xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] antialiased group/card
-          ${mode === 'mobile' ? 'max-w-[375px] mx-auto w-full shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'w-full shadow-2xl'}
-          ${title ? 'ring-1 ring-white/5' : 'opacity-60 grayscale'}
+          bg-[#111111] border border-white/10 overflow-hidden transition-all duration-300 ease-out mx-auto
+          ${mode === 'mobile' ? 'w-[375px] rounded-lg shadow-2xl' : 'w-full rounded-xl'}
         `}
-        style={{ backgroundColor: '#111111', borderColor: 'rgba(255,255,255,0.1)', borderWidth: '1px', borderStyle: 'solid' }}
+        style={{ 
+          backgroundColor: '#111111', 
+          borderColor: 'rgba(255,255,255,0.1)', 
+          borderWidth: '1px', 
+          borderStyle: 'solid',
+          maxWidth: mode === 'mobile' ? '375px' : '100%' 
+        }}
       >
-        
-        {/* Content Wrapper */}
-        <div className={`flex ${mode === 'mobile' ? 'flex-row p-3 gap-3' : 'flex-col'}`}>
+        <div className={`flex ${mode === 'mobile' ? 'flex-col' : 'flex-col sm:flex-row gap-4 p-4'}`}>
             
-            {/* Thumbnail Section */}
-            <div className={`
-                relative overflow-hidden bg-white/5 cursor-pointer group/thumb
-                ${mode === 'mobile' ? 'w-[160px] h-[90px] rounded-lg flex-shrink-0' : 'w-full aspect-video'}
-            `}>
-                {/* Thumbnail Background / Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-gray-800 to-gray-900">
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
-                </div>
-                
-                {/* Play Button Overlay */}
-                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-300 bg-black/20">
-                   <div className="w-10 h-10 rounded-full bg-black/70 backdrop-blur-md flex items-center justify-center transform scale-90 group-hover/thumb:scale-100 transition-transform duration-300">
-                       <Play className="w-4 h-4 fill-white text-white ml-0.5" />
-                   </div>
-                 </div>
+            {/* Thumbnail */}
+            <div 
+              className={`
+                relative bg-gray-900 group cursor-pointer overflow-hidden
+                ${mode === 'mobile' ? 'w-full aspect-video' : 'w-full sm:w-[360px] aspect-video rounded-lg'}
+              `}
+              style={{ backgroundColor: '#111827' }}
+            >
+               {/* Thumbnail Placeholder Gradient */}
+               <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-50" style={{ background: 'linear-gradient(to bottom right, #1f2937, #000000)', opacity: 0.5 }}></div>
+               <div className="absolute inset-0 flex items-center justify-center opacity-30 font-mono text-gray-600 text-xs">
+                 THUMBNAIL_PREVIEW
+               </div>
+               
+               {/* Duration */}
+               <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-bold px-1 py-0.5 rounded" style={{ backgroundColor: 'rgba(0,0,0,0.8)', color: '#ffffff' }}>
+                 12:45
+               </div>
 
-                {/* Duration Badge */}
-                <div className="absolute bottom-1.5 right-1.5 bg-black/80 px-1 py-0.5 rounded-[4px] text-[10px] font-bold text-white tracking-wide font-sans">
-                    10:24
-                </div>
-                
-                {/* Progress Bar */}
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/20">
-                     <div className="w-[40%] h-full bg-red-600"></div>
-                </div>
+               {/* Hover Play Button */}
+               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                 <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+                   <Play size={20} className="fill-white text-white ml-1" style={{ fill: '#ffffff', color: '#ffffff' }}/>
+                 </div>
+               </div>
             </div>
 
-            {/* Info Section */}
+            {/* Content Info */}
             <div className={`
-                flex 
-                ${mode === 'mobile' ? 'flex-col justify-start min-w-0 flex-1 py-0.5' : 'p-3 flex-row gap-3 items-start'}
+              flex flex-col gap-1
+              ${mode === 'mobile' ? 'p-3 flex-row gap-3' : 'flex-1 py-1'}
             `}>
-                
-                {/* Avatar (Desktop Only) */}
-                {mode === 'desktop' && (
-                    <div className="flex-shrink-0 mt-0.5">
-                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border border-black/50 shadow-sm"></div>
-                    </div>
+                {mode === 'mobile' && (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, #3b82f6, #9333ea)' }}></div>
                 )}
 
-                {/* Text Content */}
-                <div className="flex flex-col gap-1 w-full min-w-0">
-                     {/* Title */}
-                     <h3 
-                       className={`
-                         text-white font-sans font-medium leading-snug break-words group-hover/card:text-[#3ea6ff] transition-colors duration-200
-                         ${mode === 'mobile' ? 'text-sm line-clamp-2 mb-1' : 'text-base font-semibold line-clamp-2'}
-                       `}
-                       style={{ color: '#ffffff' }}
-                     >
-                       {title || "Your Viral Video Title Will Appear Here..."}
-                     </h3>
+                <div className="flex-1 min-w-0">
+                   <h3 
+                    className={`font-sans font-medium text-white leading-snug ${mode === 'mobile' ? 'text-sm line-clamp-2' : 'text-lg line-clamp-2'}`}
+                    style={{ color: '#ffffff', fontFamily: 'Inter, sans-serif' }}
+                   >
+                     {title || "This is how your viral video title will look on YouTube"}
+                   </h3>
+                   
+                   <div className="mt-1 flex flex-wrap items-center gap-1 text-[#aaa] text-xs" style={{ color: '#aaaaaa' }}>
+                      <span>ViralChannel</span>
+                      {mode === 'desktop' && (
+                         <span className="w-3 h-3 bg-gray-600 rounded-full flex items-center justify-center text-[8px] text-black" style={{ backgroundColor: '#4b5563', color: '#000000' }}>✓</span>
+                      )}
+                      <span>•</span>
+                      <span>1.2M views</span>
+                      <span>•</span>
+                      <span>2 days ago</span>
+                   </div>
 
-                     {/* Metadata */}
-                     <div className="flex flex-col">
-                         {mode === 'desktop' ? (
-                             <>
-                                 <div className="text-[#aaa] text-sm hover:text-white transition-colors cursor-pointer flex items-center gap-1 mb-0.5">
-                                     Creator Hub <div className="bg-gray-500 text-black text-[8px] p-0.5 rounded-full w-3 h-3 flex items-center justify-center" title="Verified">✓</div>
-                                 </div>
-                                 <div className="text-[#aaa] text-sm flex items-center gap-1">
-                                     <span>1.2M views</span>
-                                     <span className="text-[10px]">•</span>
-                                     <span>2 hours ago</span>
-                                 </div>
-                             </>
-                         ) : (
-                             // Mobile Metadata
-                             <div className="text-[#aaa] text-xs flex flex-wrap items-center gap-1 leading-tight mt-auto">
-                                 <span className="hover:text-white transition-colors">Creator Hub</span>
-                                 <span className="text-[8px]">•</span>
-                                 <span>1.2M views</span>
-                                 <span className="text-[8px]">•</span>
-                                 <span>2h ago</span>
-                             </div>
-                         )}
+                   {mode === 'desktop' && (
+                     <div className="mt-3 flex items-center gap-3">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600" style={{ background: 'linear-gradient(to bottom right, #3b82f6, #9333ea)' }}></div>
+                        <span className="text-xs text-gray-400" style={{ color: '#9ca3af' }}>ViralChannel</span>
                      </div>
+                   )}
                 </div>
 
-                {/* Menu Dots */}
-                {mode === 'desktop' && (
-                    <div className="flex-shrink-0 -mr-1 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                         <button className="p-2 hover:bg-white/10 rounded-full active:bg-white/20 transition-colors">
-                             <MoreVertical className="w-5 h-5 text-white" />
-                         </button>
-                    </div>
-                )}
-                 {mode === 'mobile' && (
-                    <div className="flex-shrink-0 -mr-2 -mt-1">
-                         <button className="p-2 text-white/60 hover:text-white">
-                             <MoreVertical className="w-4 h-4" />
-                         </button>
-                    </div>
+                {mode === 'mobile' && (
+                  <MoreVertical size={16} className="text-white min-w-[16px]" style={{ color: '#ffffff' }} />
                 )}
             </div>
         </div>
       </div>
-      
-      {/* Helper Text */}
-      <div className="text-center opacity-60">
-         <p className="text-[10px] font-mono text-gray-500">
-           {mode === 'mobile' ? 'PREVIEW: MOBILE SEARCH RESULT' : 'PREVIEW: DESKTOP HOME FEED'}
+
+      <div className="text-center">
+         <p className="text-[10px] font-mono text-gray-500" style={{ color: '#6b7280' }}>
+            {mode === 'mobile' ? 'PREVIEW: MOBILE FEED' : 'PREVIEW: DESKTOP SEARCH'}
          </p>
       </div>
     </div>
